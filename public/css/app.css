@@ -102,8 +102,7 @@ h2 {
 }
 .btn-eliminar {
     margin-top: 1rem;
-    font-family: "Font Awesome 5 Free", Arial, Helvetica, sans-serif; 
-    font-weight: 900; 
+    font-weight: 700; 
 }
 /** GRID **/
 @media (min-width: 768px) {
