@@ -14,7 +14,7 @@ function Clientes() {
 
   useEffect(() => {
     consultarAPI()
-  },[])
+  }, [clientes])
 
   return(
     <>
