@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import clienteAxios from "../../config/axios"
 
 function EditarCliente() {
+
   const history = useNavigate()
   const { idCliente } = useParams()
 
@@ -126,7 +127,6 @@ function EditarCliente() {
               disabled={validarCliente()}
             />
           </div>
-
       </form>
     </>
   )
