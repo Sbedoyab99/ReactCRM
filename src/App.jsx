@@ -7,6 +7,8 @@ import NuevoCliente from "./components/clients/NuevoCliente"
 import EditarCliente from "./components/clients/EditarCliente"
 import NuevoProducto from "./components/productos/NuevoProducto"
 import EditarProducto from "./components/productos/EditarProducto"
+import NuevoPedido from "./components/pedidos/NuevoPedido"
+import EditarPedido from "./components/pedidos/EditarPedido"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 
 function App() {
@@ -26,6 +28,8 @@ function App() {
               <Route path="/productos/nuevo" element={<NuevoProducto/>}/>
               <Route path="/productos/editar/:idProducto" element={<EditarProducto/>}/>
               <Route path="/pedidos" element={<Pedidos/>}/>
+              <Route path="/pedidos/nuevo/:idCliente" element={<NuevoPedido/>}/>
+              <Route path="/pedidos/editar/:idPedido" element={<EditarPedido/>}/>
             </Routes>
           </main>
         </div>

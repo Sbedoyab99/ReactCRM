@@ -111,7 +111,7 @@ function EditarProducto() {
               <input 
                 type="submit" 
                 className="btn btn-azul" 
-                value="Agregar Producto"
+                value="Guardar Cambios"
               />
           </div>
       </form>
