@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Swal from "sweetalert2"
 import { useNavigate, useParams } from "react-router-dom"
 import clienteAxios from "../../config/axios"
+import { CRMContext } from "../../context/CRMContext"
 
 function EditarCliente() {
 
   const history = useNavigate()
   const { idCliente } = useParams()
+
+  const [auth, setAuth] = useContext(CRMContext)
 
   const [cliente, setCliente] = useState({
     nombre: '',
@@ -17,12 +20,26 @@ function EditarCliente() {
   })
 
   const consultarAPI = async () => {
-    const clienteConsulta = await clienteAxios.get(`/clientes/${idCliente}`)
+    const clienteConsulta = await clienteAxios.get(`/clientes/${idCliente}`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`
+      }
+    })
     setCliente(clienteConsulta.data)
   }
 
   useEffect(() => {
-    consultarAPI()
+    if(auth.token !== '') {
+      try {
+        consultarAPI()
+      } catch (error) {
+        if(error.response.status === 500) {
+          history('/login')
+        }
+      }
+    } else {
+      history('/login')
+    }
   }, [])
 
   function actualizarState(e) {

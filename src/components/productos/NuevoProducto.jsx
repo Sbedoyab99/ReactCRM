@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import Swal from "sweetalert2"
 import { useNavigate } from "react-router-dom"
 import clienteAxios from "../../config/axios"
+import { CRMContext } from "../../context/CRMContext"
 
 function NuevoProducto() {
   const history = useNavigate()
@@ -12,6 +13,7 @@ function NuevoProducto() {
   })
 
   const [imagen, setImagen] = useState('')
+  const [auth, isAuth] = useContext(CRMContext)
 
   const leerProducto = e => {
     setProducto({
@@ -32,7 +34,8 @@ function NuevoProducto() {
     formData.append('imagen', imagen)
     clienteAxios.post('/productos', formData, {
       headers: {
-        "Content-Type": 'multipart/form-data'
+        "Content-Type": 'multipart/form-data',
+        Authorization: `Bearer ${auth.token}`
       }
     })
       .then(res => {

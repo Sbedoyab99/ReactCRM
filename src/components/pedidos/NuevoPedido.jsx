@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import Swal from "sweetalert2"
 import { useNavigate, useParams } from "react-router-dom"
 import clienteAxios from "../../config/axios"
 import FormBuscarProducto from "./FormBuscarProducto"
 import FormCantidad from "./FormCantidad"
+import { CRMContext } from "../../context/CRMContext"
 
 function NuevoPedido() {
 
@@ -14,14 +15,29 @@ function NuevoPedido() {
   const [busqueda, setBusqueda] = useState('')
   const [productos, setProductos] = useState([])
   const [total, setTotal] = useState(0)
+  const [auth, setAuth] = useContext(CRMContext)
 
   const consultarAPI = async () => {
-    const cliente = await clienteAxios.get(`/clientes/${idCliente}`)
+    const cliente = await clienteAxios.get(`/clientes/${idCliente}`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`
+      }
+    })
     setCliente(cliente.data)
   }
 
   useEffect(() => {
-    consultarAPI()
+    if(auth.token !== '') {
+      try {
+        consultarAPI()
+      } catch (error) {
+        if(error.response.status === 500) {
+          history('/login')
+        }
+      }
+    } else {
+      history('/login')
+    }
   }, [])
 
   useEffect(() => {
@@ -99,7 +115,11 @@ function NuevoPedido() {
       "pedido": productos,
       "total": total
     }
-    clienteAxios.post('/pedidos', pedido)
+    clienteAxios.post('/pedidos', pedido, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`
+      }
+    })
       .then(res => {
         Swal.fire({
           icon: 'success',

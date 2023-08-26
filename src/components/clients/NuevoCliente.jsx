@@ -1,10 +1,13 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import Swal from "sweetalert2"
 import { useNavigate } from "react-router-dom"
 import clienteAxios from "../../config/axios"
+import { CRMContext } from "../../context/CRMContext"
 
 function NuevoCliente() {
   const history = useNavigate()
+
+  const [auth, setAuth] = useContext(CRMContext)
 
   const [cliente, setCliente] = useState({
     nombre: '',
@@ -29,7 +32,11 @@ function NuevoCliente() {
 
   const agregarCliente = e => {
     e.preventDefault()
-    clienteAxios.post('/clientes', cliente)
+    clienteAxios.post('/clientes', cliente, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`
+      }
+    })
       .then(res => {
         Swal.fire(
           'Se agrego el cliente',
@@ -46,6 +53,8 @@ function NuevoCliente() {
         })
       })
   }
+
+  if(!auth.auth) return history('/login')
 
   return (
     <>

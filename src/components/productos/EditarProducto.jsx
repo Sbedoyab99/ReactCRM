@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Swal from "sweetalert2"
 import { useNavigate, useParams } from "react-router-dom"
 import clienteAxios from "../../config/axios"
+import { CRMContext } from "../../context/CRMContext"
 
 function EditarProducto() {
 
@@ -16,8 +17,14 @@ function EditarProducto() {
 
   const [imagen, setImagen] = useState('')
 
+  const [auth, isAuth] = useContext(CRMContext)
+
   const consultarAPI = async () => {
-    const productoConsulta = await clienteAxios.get(`/productos/${idProducto}`)
+    const productoConsulta = await clienteAxios.get(`/productos/${idProducto}`, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`
+      }
+    })
     setProducto(productoConsulta.data)
   }
 
@@ -44,7 +51,8 @@ function EditarProducto() {
     formData.append('imagen', imagen)
     clienteAxios.put(`/productos/${idProducto}`, formData, {
       headers: {
-        "Content-Type": 'multipart/form-data'
+        "Content-Type": 'multipart/form-data',
+        Authorization: `Bearer ${auth.token}`
       }
     })
       .then(res => {

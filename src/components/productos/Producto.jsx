@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom"
 import Swal from "sweetalert2"
 import clienteAxios from "../../config/axios"
+import { CRMContext } from "../../context/CRMContext"
+import { useContext } from "react"
 
 function Producto({producto}) {
   const {_id, nombre, precio, imagen} = producto
+
+	const [auth, isAuth] = useContext(CRMContext)
 
   const eliminarProducto = idProducto => {
     Swal.fire({
@@ -17,7 +21,11 @@ function Producto({producto}) {
 			cancelButtonText: 'Cancelar'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				clienteAxios.delete(`/productos/${idProducto}`)
+				clienteAxios.delete(`/productos/${idProducto}`, {
+					headers: {
+						Authorization: `Bearer ${auth.token}`
+					}
+				})
 					.then(res => {
 						Swal.fire(
 							'Eliminado!',
